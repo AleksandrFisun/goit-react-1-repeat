@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/AleksandrFisun/goit-react-1-repeat/static/css/main.34ef4eee.css",
-    "main.js": "/AleksandrFisun/goit-react-1-repeat/static/js/main.f8d0f692.js",
+    "main.js": "/AleksandrFisun/goit-react-1-repeat/static/js/main.a3e50b33.js",
     "index.html": "/AleksandrFisun/goit-react-1-repeat/index.html",
     "main.34ef4eee.css.map": "/AleksandrFisun/goit-react-1-repeat/static/css/main.34ef4eee.css.map",
-    "main.f8d0f692.js.map": "/AleksandrFisun/goit-react-1-repeat/static/js/main.f8d0f692.js.map"
+    "main.a3e50b33.js.map": "/AleksandrFisun/goit-react-1-repeat/static/js/main.a3e50b33.js.map"
   },
   "entrypoints": [
     "static/css/main.34ef4eee.css",
-    "static/js/main.f8d0f692.js"
+    "static/js/main.a3e50b33.js"
   ]
 }
