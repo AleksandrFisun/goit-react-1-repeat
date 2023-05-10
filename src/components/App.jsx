@@ -1,6 +1,7 @@
-import { Profile } from './profile/Profile';
 import PropTypes from 'prop-types';
-import user from '../data/profile';
+
+import { Profile } from './profile/Profile';
+import user from 'data/profile';
 
 export const App = () => {
   return (
