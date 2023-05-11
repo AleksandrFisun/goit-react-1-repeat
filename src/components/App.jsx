@@ -1,17 +1,21 @@
 import PropTypes from 'prop-types';
 
-import { Profile } from './profile/Profile';
+import Profile from './profile/Profile';
+import Feedback from './feedback/Feedback';
 import user from 'data/profile';
 
 export const App = () => {
   return (
-    <Profile
-      username={user.username}
-      tag={user.tag}
-      location={user.location}
-      avatar={user.avatar}
-      stats={user.stats}
-    />
+    <>
+      <Profile
+        username={user.username}
+        tag={user.tag}
+        location={user.location}
+        avatar={user.avatar}
+        stats={user.stats}
+      />
+      <Feedback />
+    </>
   );
 };
 Profile.propTypes = {

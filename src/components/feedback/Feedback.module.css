@@ -1,0 +1,9 @@
+.FeedbackWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 320px;
+  margin: 10px auto;
+  padding-top: 10px;
+}

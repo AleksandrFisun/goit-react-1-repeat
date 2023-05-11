@@ -1,0 +1,18 @@
+.ButtonWrapper {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 16px;
+}
+.ButtonFeedback {
+  height: 20px;
+  border: 1px solid black;
+  border-radius: 10px;
+  width: 80px;
+}
+.ButtonFeedback:active,
+.ButtonFeedback:hover {
+  border: 1px solid green;
+  color: green;
+}
