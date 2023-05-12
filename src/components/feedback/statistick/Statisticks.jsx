@@ -1,8 +1,10 @@
 import React from 'react';
+import { ListStatistick } from './Statistick.style';
 export const Statistics = ({ good, neutral, bad, total, positive }) => {
   return (
     <div>
-      <ul>
+      <h2>Statistics</h2>
+      <ListStatistick>
         <li>
           <span>Good: </span>
           <span>{good}</span>
@@ -23,7 +25,7 @@ export const Statistics = ({ good, neutral, bad, total, positive }) => {
           <span>Positive: </span>
           <span>{positive} %</span>
         </li>
-      </ul>
+      </ListStatistick>
     </div>
   );
 };

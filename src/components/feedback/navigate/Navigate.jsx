@@ -1,18 +1,15 @@
-import css from './Navigate.module.css';
+import { ButtonFeefback, ButtonWrapper } from './Navigate.style';
 export const Navigate = ({ options, onLeaveFeedback }) => {
   return (
     <>
-      <div className={css.ButtonWrapper}>
+      <h2>Please leave feedback</h2>
+      <ButtonWrapper>
         {options.map(name => (
-          <button
-            className={css.ButtonFeedback}
-            key={name}
-            onClick={() => onLeaveFeedback(name)}
-          >
+          <ButtonFeefback key={name} onClick={() => onLeaveFeedback(name)}>
             {name}
-          </button>
+          </ButtonFeefback>
         ))}
-      </div>
+      </ButtonWrapper>
     </>
   );
 };

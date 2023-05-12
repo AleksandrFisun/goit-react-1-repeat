@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 
 import Profile from './profile/Profile';
 import Feedback from './feedback/Feedback';
+import PhoneBook from './phonebook/PhoneBook';
 import user from 'data/profile';
 
 export const App = () => {
@@ -15,6 +16,7 @@ export const App = () => {
         stats={user.stats}
       />
       <Feedback />
+      <PhoneBook />
     </>
   );
 };

@@ -3,6 +3,7 @@ import css from './Feedback.module.css';
 
 import { Navigate } from './navigate/Navigate';
 import { Statistics } from './statistick/Statisticks';
+import { Section } from './section/section';
 
 export default class Feedback extends Component {
   state = {
@@ -32,23 +33,25 @@ export default class Feedback extends Component {
 
     return (
       <>
-        <div className={css.FeedbackWrapper}>
-          <Navigate
-            options={Object.keys(this.state)}
-            onLeaveFeedback={this.leaveFeadback}
-          />
-          {total ? (
-            <Statistics
-              good={good}
-              neutral={neutral}
-              bad={bad}
-              total={total}
-              positive={positiveFeedback}
+        <Section>
+          <div className={css.FeedbackWrapper}>
+            <Navigate
+              options={Object.keys(this.state)}
+              onLeaveFeedback={this.leaveFeadback}
             />
-          ) : (
-            <p>Leave your feedback</p>
-          )}
-        </div>
+            {total ? (
+              <Statistics
+                good={good}
+                neutral={neutral}
+                bad={bad}
+                total={total}
+                positive={positiveFeedback}
+              />
+            ) : (
+              <p>Leave your feedback</p>
+            )}
+          </div>
+        </Section>
       </>
     );
   }
