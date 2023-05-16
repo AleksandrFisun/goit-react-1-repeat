@@ -6,6 +6,7 @@ import { nanoid } from 'nanoid';
 
 export const SearchContact = ({ onChange, filter }) => {
   const idSerachContact = nanoid();
+
   return (
     <>
       <WrapperSearchContact>
