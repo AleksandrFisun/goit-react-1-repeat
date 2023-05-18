@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 import { Section } from '../phonebook/section/Section';
@@ -8,173 +8,106 @@ import { getImage } from './api/api';
 import { ButtonLoadMore } from './button/Button';
 import { Loader } from './loader/Loader';
 import { Modal } from '../Modal/Modal';
+import { ModalCard } from './cardModal/cardModal';
 
-import {
-  WrapperButtonLoadMore,
-  ModalImg,
-  ModalList,
-  ModalItem,
-  ModalButton,
-  ModalText,
-} from './Gallary.style';
+import { WrapperButtonLoadMore } from './Gallary.style';
 
-export class Gallary extends Component {
-  state = {
-    values: '',
-    images: [],
-    page: 0,
-    largeImage: '',
-    user: '',
-    views: '',
-    likes: '',
-    tags: '',
-    showModal: false,
-    isLoading: false,
-    error: null,
-  };
+export const Gallary = () => {
+  const [images, setImages] = useState([]);
+  const [imageModal, setImageModal] = useState([]);
+  const [page, setPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [values, setValues] = useState('');
+  const [error, setError] = useState(null);
+  const [totalHits, setTotalHits] = useState(0);
 
-  async componentDidUpdate(prevProps, prevState) {
-    const prevValue = prevState.values;
-    const prevPage = prevState.page;
-
-    const { values, page, images } = this.state;
-    if (prevValue !== values || prevPage !== page) {
-      try {
-        const fetchImage = getImage(values, page);
-        this.setState({ isLoading: true });
-        this.setState({ showModal: false });
-        fetchImage.then(data =>
-          data.total === 0
-            ? toast.error('💩 Ничего не найдено!', {
-                position: 'top-right',
-                autoClose: 5000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'dark',
-              })
-            : data.hits.forEach(
-                ({
-                  id,
-                  webformatURL,
-                  largeImageURL,
-                  user,
-                  likes,
-                  views,
-                  tags,
-                }) => {
-                  !images.some(image => image.id === id) &&
-                    this.setState(({ images }) => ({
-                      images: [
-                        ...images,
-                        {
-                          id,
-                          webformatURL,
-                          largeImageURL,
-                          user,
-                          likes,
-                          views,
-                          tags,
-                        },
-                      ],
-                    }));
-                  this.setState({ isLoading: false });
-                }
-              )
-        );
-      } catch (error) {
-        this.setState({ error });
+  useEffect(() => {
+    const fetchImage = async () => {
+      if (!values) {
+        return;
       }
+      setIsLoading(true);
+      try {
+        const response = await getImage(values, page);
+        setShowModal(false);
+        if (response.total === 0) {
+          return toast.error(`💩 Ничего не найдено!`);
+        }
+        setImages([...images, ...response.hits]);
+        setTotalHits(response.total);
+      } catch (error) {
+        setIsLoading(false);
+        setError({ error });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    if (error) {
+      toast.warn(`🐷 ${error}`);
     }
-  }
-  onSubmitForm = value => {
-    const { values } = this.state;
+    fetchImage();
+    return;
+  }, [values, page]);
+
+  useEffect(() => {
+    if (totalHits === 0) {
+      return;
+    }
+    toast.success(`💪 Всего найдено ${totalHits} !`);
+    return;
+  }, [totalHits]);
+  useEffect(() => {
+    if (totalHits === 0) {
+      return;
+    }
+    if (images.length === totalHits && images.length !== 0) {
+      toast.success('🎉👻 Вы посмотрели все изображения!');
+    }
+    return;
+  }, [images.length, totalHits]);
+
+  const onSubmitForm = value => {
     if (value === values) {
-      return toast.warn('🐷 Введите что-то новое!', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'dark',
-      });
+      return toast.warn('🐷 Введите что-то новое!');
     }
-    this.setState({ values: value, page: 1, images: [] });
+    setValues(value);
+    setPage(1);
+    setImages([]);
   };
 
-  onLoadMore = () => {
-    this.setState(({ page }) => ({
-      page: page + 1,
-    }));
-  };
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }));
+  const onLoadMore = () => {
+    setPage(page + 1);
   };
 
-  openModal = index => {
-    this.setState(({ images }) => ({
-      largeImage: images[index].largeImageURL,
-      user: images[index].user,
-      likes: images[index].likes,
-      views: images[index].views,
-      tags: images[index].tags,
-    }));
-    this.toggleModal();
+  const toggleModal = () => {
+    setShowModal(!showModal);
   };
 
-  render() {
-    const {
-      images,
-      isLoading,
-      showModal,
-      largeImage,
-      user,
-      likes,
-      views,
-      tags,
-    } = this.state;
-    return (
-      <>
-        <SearchBar onSubmit={this.onSubmitForm} />
-        <Section>
-          <ImageGalleryList images={images} openModal={this.openModal} />
+  const openModal = id => {
+    const onFilterImage = images.filter(img => img.id === id);
+    setImageModal(onFilterImage);
+    toggleModal();
+  };
 
-          <WrapperButtonLoadMore>
-            <Loader isLoading={isLoading} />
-            {images.length !== 0 && (
-              <ButtonLoadMore onLoadMore={this.onLoadMore} />
-            )}
-          </WrapperButtonLoadMore>
-        </Section>
-        {showModal && (
-          <Modal onCloseBackdrop={this.toggleModal}>
-            <ModalButton type="button" onClick={this.toggleModal}></ModalButton>
-            <div>
-              <ModalImg src={largeImage} alt="" />
-            </div>
-            <ModalList>
-              <ModalItem>
-                <ModalText>User:{user}</ModalText>
-              </ModalItem>
-              <ModalItem>
-                <ModalText>Likes:{likes}</ModalText>
-              </ModalItem>
-              <ModalItem>
-                <ModalText>Views:{views}</ModalText>
-              </ModalItem>
-              <ModalItem>
-                <ModalText>Tags:{tags}</ModalText>
-              </ModalItem>
-            </ModalList>
-          </Modal>
-        )}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <SearchBar onSubmit={onSubmitForm} />
+      <Section>
+        <ImageGalleryList images={images} openModal={openModal} />
+
+        <WrapperButtonLoadMore>
+          <Loader isLoading={isLoading} />
+          {images.length !== 0 && images.length !== totalHits && (
+            <ButtonLoadMore onLoadMore={onLoadMore} />
+          )}
+        </WrapperButtonLoadMore>
+      </Section>
+      {showModal && (
+        <Modal onCloseBackdrop={toggleModal}>
+          <ModalCard onBtnExit={toggleModal} imageModal={imageModal} />
+        </Modal>
+      )}
+    </>
+  );
+};
