@@ -19,7 +19,6 @@ export const Gallary = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [values, setValues] = useState('');
-  const [error, setError] = useState(null);
   const [totalHits, setTotalHits] = useState(0);
 
   useEffect(() => {
@@ -34,18 +33,18 @@ export const Gallary = () => {
         if (response.total === 0) {
           return toast.error(`💩 Ничего не найдено!`);
         }
-        setImages([...images, ...response.hits]);
+        setImages(prev => {
+          return [...prev, ...response.hits];
+        });
+
         setTotalHits(response.total);
       } catch (error) {
         setIsLoading(false);
-        setError({ error });
+        toast.warn(`🐷 ${error}`);
       } finally {
         setIsLoading(false);
       }
     };
-    if (error) {
-      toast.warn(`🐷 ${error}`);
-    }
     fetchImage();
     return;
   }, [values, page]);
