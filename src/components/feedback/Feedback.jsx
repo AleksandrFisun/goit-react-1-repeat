@@ -24,7 +24,7 @@ export const Feedback = () => {
   useEffect(() => {
     setTotal(good + neutral + bad);
     setPositive(Math.round((good / total) * 100));
-  }, [good, neutral, bad]);
+  }, [good, neutral, bad, total]);
 
   return (
     <>
